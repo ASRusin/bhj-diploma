@@ -3,5 +3,6 @@
  * на сервер.
  * */
 const createRequest = (options = {}) => {
-
+    const xhr = new XMLHttpRequest();
+    
 };
