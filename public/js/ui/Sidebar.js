@@ -44,5 +44,14 @@ class Sidebar {
     registerBtn.addEventListener("click", (e) => {
       register.open();
     });
+    const logoutBtn = document.querySelector(".menu-item_logout");
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      User.logout(localStorage.user, (err, response) => {
+        if (response.success === true) {
+          App.setState("init");
+        }
+      });
+    });
   }
 }

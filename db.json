@@ -6,6 +6,13 @@
       "password": "demo",
       "id": "1",
       "isAuthorized": false
+    },
+    {
+      "name": "Александр Русин",
+      "email": "Alexandr@demo.ru",
+      "password": "demo",
+      "id": "abpkxo572ywkjpnqliz",
+      "isAuthorized": false
     }
   ],
   "accounts": [
