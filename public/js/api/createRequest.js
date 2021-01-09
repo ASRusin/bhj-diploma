@@ -12,9 +12,11 @@ const createRequest = (options = {}) => {
     url = `${options.url}?${url.slice(1)}`;
     xhr.open(options.method, url);
     xhr.withCredentials = true;
+
     for (let key in options.headers) {
       xhr.setRequestHeader(key, options.headers[key]);
     }
+
     xhr.send();
   } else {
     const formData = new FormData();
@@ -23,24 +25,22 @@ const createRequest = (options = {}) => {
     }
     xhr.open(options.method, options.url);
     xhr.withCredentials = true;
+
     for (let key in options.headers) {
       xhr.setRequestHeader(key, options.headers[key]);
     }
+
     xhr.send(formData);
   }
   xhr.addEventListener("readystatechange", () => {
     if (xhr.readyState === xhr.DONE) {
-      const response = JSON.parse(xhr.response);
+      const response = JSON.parse(xhr.responseText);
+      
       if (response.success === true) {
         options.callback(null, response);
       } else {
         options.callback(response.error, response);
       }
-      // if (options.responseType === "json") {
-      //   return xhr.response;
-      // } else {
-      //   return JSON.parse(xhr.response);
-      // }
     }
   });
 };

@@ -42,7 +42,7 @@ class Modal {
    * Закрывает текущее окно (Modal.close())
    * */
   onClose(e) {
-    e.close().unregisterEvents();
+    e.close();
   }
   /**
    * Удаляет обработчики событий

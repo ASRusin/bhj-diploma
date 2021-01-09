@@ -11,7 +11,7 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    localStorage.user = user;
+    localStorage.user = JSON.stringify(user);
   }
 
   /**
@@ -28,7 +28,11 @@ class User {
    * */
   static current() {
     if (localStorage.user) {
-      return localStorage.user;
+      try {
+        return JSON.parse(localStorage.user);
+      } catch (e) {
+        return null;
+      }
     } else {
       return undefined;
     }
