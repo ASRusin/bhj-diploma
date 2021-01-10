@@ -4,9 +4,6 @@
  * Наследуется от AsyncForm
  * */
 class CreateAccountForm extends AsyncForm {
-  constructor(element) {
-    super(element);
-  }
   /**
    * Создаёт счёт с помощью Account.create и закрывает
    * окно (в котором находится форма) в случае успеха,

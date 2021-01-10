@@ -102,11 +102,27 @@ class AccountsWidget {
     const a = document.createElement("a");
     const spanFirst = document.createElement("span");
     const spanSecond = document.createElement("span");
-    li.className = "active account";
+    li.className = "account";
     li.dataset.id = item.id;
     a.href = "#";
     spanFirst.textContent = item.name + " / ";
-    spanSecond.textContent = item.sum + " ₽";
+    let sumString = item.sum.toLocaleString();
+    const arr = sumString.split("");
+    const arr2 = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === " ") {
+        arr2.push(",");
+      } else if (arr[i] === ",") {
+        arr2.push(".");
+      } else {
+        arr2.push(arr[i]);
+      }
+    }
+    if (arr2[arr2.length - 2] === ".") {
+      arr2.push("0");
+    }
+    sumString = arr2.join("");
+    spanSecond.textContent = sumString + " ₽";
     a.appendChild(spanFirst);
     a.appendChild(spanSecond);
     li.appendChild(a);
@@ -126,3 +142,4 @@ class AccountsWidget {
     }
   }
 }
+
