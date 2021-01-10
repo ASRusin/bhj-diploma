@@ -133,17 +133,109 @@ class TransactionsPage {
    * Форматирует дату в формате 2019-03-10 03:20:41 (строка)
    * в формат «10 марта 2019 г. в 03:20»
    * */
-  formatDate(date) {}
+  formatDate(date) {
+    const month = [
+      "января",
+      "февраля",
+      "марта",
+      "апреля",
+      "мая",
+      "июня",
+      "июля",
+      "августа",
+      "сентября",
+      "октября",
+      "ноября",
+      "декабря",
+    ];
+
+    let newDate = `${date.slice(8, 10)} ${month[Number(date.slice(5, 7)) - 1]} ${date.slice(
+      0,
+      4,
+    )} г. в ${date.slice(11, 16)}`;
+    return newDate;
+  }
 
   /**
    * Формирует HTML-код транзакции (дохода или расхода).
    * item - объект с информацией о транзакции
    * */
-  getTransactionHTML(item) {}
+  getTransactionHTML(item) {
+    const date = this.formatDate(item.date);
+    const generalDiv = document.createElement("div");
+    if (item.type === "expense") {
+      generalDiv.className = "transaction transaction_expense row";
+    } else {
+      generalDiv.className = "transaction transaction_income row";
+    }
+    const detailsDiv = document.createElement("div");
+    detailsDiv.className = "col-md-7 transaction__details";
+
+    const iconDiv = document.createElement("div");
+    iconDiv.className = "transaction__icon";
+
+    const faSpan = document.createElement("span");
+    faSpan.className = "fa fa-money fa-2x";
+
+    iconDiv.appendChild(faSpan);
+    detailsDiv.appendChild(iconDiv);
+
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "transaction__info";
+
+    const titleH4 = document.createElement("h4");
+    titleH4.className = "transaction__title";
+    titleH4.textContent = item.name;
+
+    const dateDiv = document.createElement("div");
+    dateDiv.className = "transaction__date";
+    dateDiv.textContent = date;
+
+    infoDiv.appendChild(titleH4);
+    infoDiv.appendChild(dateDiv);
+    detailsDiv.appendChild(infoDiv);
+    generalDiv.appendChild(detailsDiv);
+
+    const md3Div = document.createElement("div");
+    md3Div.className = "col-md-3";
+
+    const sumDiv = document.createElement("div");
+    sumDiv.className = "transaction__summ";
+    sumDiv.textContent = item.sum;
+
+    const currencySpan = document.createElement("span");
+    currencySpan.className = "currency";
+    currencySpan.textContent = "₽";
+
+    sumDiv.appendChild(currencySpan);
+    md3Div.appendChild(sumDiv);
+    generalDiv.appendChild(md3Div);
+
+    const controlsDiv = document.createElement("div");
+    controlsDiv.className = "col-md-2 transaction__controls";
+
+    const button = document.createElement("button");
+    button.className = "btn btn-danger transaction__remove";
+    button.dataset.id = item.id;
+
+    const trashI = document.createElement("i");
+    trashI.className = "fa fa-trash";
+
+    button.appendChild(trashI);
+    controlsDiv.appendChild(button);
+    generalDiv.appendChild(controlsDiv);
+    return generalDiv;
+  }
 
   /**
    * Отрисовывает список транзакций на странице
    * используя getTransactionHTML
    * */
-  renderTransactions(data) {}
+  renderTransactions(data) {
+    const content = this.element.querySelector(".content");
+    for (let item of data) {
+      const html = this.getTransactionHTML(item);
+      content.appendChild(html);
+    }
+  }
 }

@@ -34,6 +34,7 @@ class AccountsWidget {
       e.preventDefault();
       App.getModal("createAccount").open();
     });
+
     const account = this.element.querySelectorAll(".account");
     for (let acc of account) {
       acc.addEventListener("click", (e) => {
@@ -88,7 +89,7 @@ class AccountsWidget {
     for (let acc of account) {
       acc.className = "account";
     }
-    element.classList.toggle(".active");
+    element.className = "active account";
     App.showPage("transactions", { account_id: element.dataset.id });
   }
 
@@ -140,6 +141,6 @@ class AccountsWidget {
       const html = this.getAccountHTML(i);
       this.element.appendChild(html);
     }
+    this.registerEvents();
   }
 }
-
