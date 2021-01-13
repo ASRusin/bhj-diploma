@@ -72,7 +72,8 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static remove(id = "", data, callback = (f) => f) {
-    const modifiedData = Object.assign({ _method: "DELETE", id: id }, data);
+    const modifiedData = Object.assign({ _method: "DELETE" }, data);
+    modifiedData.id = id;
     return createRequest({
       url: this.URL,
       data: modifiedData,

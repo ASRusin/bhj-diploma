@@ -37,17 +37,20 @@ class TransactionsPage {
    * */
   registerEvents() {
     const removeAccount = this.element.querySelector(".remove-account");
-    const transactionRemove = this.element.querySelector(".transaction__remove");
+    const transactionRemove = this.element.querySelectorAll(".transaction__remove");
     if (removeAccount) {
       removeAccount.addEventListener("click", (e) => {
         e.preventDefault();
         this.removeAccount();
       });
-    } else {
-      transactionRemove.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.removeTransaction(transactionRemove.dataset.id);
-      });
+    }
+    if (transactionRemove) {
+      for (let item of transactionRemove) {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.removeTransaction(item.dataset.id);
+        });
+      }
     }
   }
 
@@ -60,11 +63,12 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-    if (this.lastOption) {
+    if (this.lastOption.account_id) {
       let answer = confirm("Вы действительно хотите удалить счёт?");
       if (answer === true) {
-        Account.remove(this.lastOption, User.current(), (err, response) => {
+        Account.remove(this.lastOption.account_id, User.current(), (err, response) => {
           if (response.success === true) {
+            this.clear();
             App.update();
           }
         });
@@ -102,8 +106,9 @@ class TransactionsPage {
           this.renderTitle(response.data.name);
         }
       });
-      Transaction.list(User.current(), (err, response) => {
+      Transaction.list(options, (err, response) => {
         if (response.success === true) {
+          this.renderTransactions([]);
           this.renderTransactions(response.data);
         }
       });
@@ -161,9 +166,9 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item) {
-    const date = this.formatDate(item.date);
+    const date = this.formatDate(item.created_at);
     const generalDiv = document.createElement("div");
-    if (item.type === "expense") {
+    if (item.type === "expense" || item.type === "EXPENSE") {
       generalDiv.className = "transaction transaction_expense row";
     } else {
       generalDiv.className = "transaction transaction_income row";
@@ -233,9 +238,18 @@ class TransactionsPage {
    * */
   renderTransactions(data) {
     const content = this.element.querySelector(".content");
-    for (let item of data) {
-      const html = this.getTransactionHTML(item);
-      content.appendChild(html);
+    if (data.length === 0) {
+      const transactions = content.querySelectorAll(".transaction");
+      for (let item of transactions) {
+        item.remove();
+      }
+    } else {
+      for (let item of data) {
+        const html = this.getTransactionHTML(item);
+        content.appendChild(html);
+      }
     }
+
+    this.registerEvents();
   }
 }

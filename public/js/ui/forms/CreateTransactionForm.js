@@ -20,28 +20,35 @@ class CreateTransactionForm extends AsyncForm {
   renderAccountsList() {
     const incomeAccountsList = this.element.querySelector("#income-accounts-list");
     const expenseAccountsList = this.element.querySelector("#expense-accounts-list");
+
     if (incomeAccountsList) {
       Account.list(User.current(), (err, response) => {
         if (response.success === true) {
           const list = response.data;
-          for (let item of list) {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.textContent = item.name;
-            incomeAccountsList.appendChild(option);
+          for (let i = 0; i < list.length; i++) {
+            if (incomeAccountsList.options[i] === undefined) {
+              const option = document.createElement("option");
+              option.value = list[i].id;
+              option.textContent = list[i].name;
+              incomeAccountsList.appendChild(option);
+            }
           }
+          
         }
       });
     } else {
       Account.list(User.current(), (err, response) => {
         if (response.success === true) {
           const list = response.data;
-          for (let item of list) {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.textContent = item.name;
-            expenseAccountsList.appendChild(option);
+          for (let i = 0; i < list.length; i++) {
+            if (expenseAccountsList.options[i] === undefined) {
+              const option = document.createElement("option");
+              option.value = list[i].id;
+              option.textContent = list[i].name;
+              expenseAccountsList.appendChild(option);
+            }
           }
+          
         }
       });
     }
